@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<IWeatherService, WeatherService>();
+// builder.Services.AddScoped<IWeatherService, WeatherService>();
+// builder.Services.AddTransient<IWeatherService, WeatherService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +31,13 @@ app.MapGet("/weatherforecast", Results<Ok<WeatherForecast[]>, BadRequest<string>
         return TypedResults.Ok(weatherService.GetData(days));
     })
     .WithName("GetWeatherforecast");
+
+
+app.MapGet("/debug/ids",(IWeatherService weatherServiceFirst, IWeatherService weatherServiceSecond) =>
+    {
+        return new { FirstId = weatherServiceFirst.Id, SecondId = weatherServiceSecond.Id };
+    })
+    .WithName("GetDebugIds");
 
 app.MapGet("/hello", () =>
     {

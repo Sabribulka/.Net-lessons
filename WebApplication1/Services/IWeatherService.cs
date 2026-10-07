@@ -4,5 +4,6 @@ namespace WebApplication1.Services;
 
 public interface IWeatherService
 {
-     public WeatherForecast[] GetData(int? days);
+    Guid Id { get; }
+    WeatherForecast[] GetData(int? days);
 }

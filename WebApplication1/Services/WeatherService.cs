@@ -8,8 +8,12 @@ public class WeatherService : IWeatherService
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
+    public Guid Id { get; }
+
     public WeatherForecast[] GetData(int? days)
     {
+        Console.WriteLine(Id);
+        
         return Enumerable.Range(1, days ?? 5).Select(index =>
                 new WeatherForecast
                 (
@@ -18,5 +22,11 @@ public class WeatherService : IWeatherService
                     Summaries[Random.Shared.Next(Summaries.Length)]
                 ))
             .ToArray();
+    }
+
+    public WeatherService()
+    {
+        Id = Guid.NewGuid();
+        Console.WriteLine(Id);
     }
 }
