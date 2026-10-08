@@ -14,15 +14,39 @@ Content-Type: application/json
 > {%
     client.global.set("todoId", response.body.id);
 
-    client.test("Returns 200", function () {
-        client.assert(response.status === 200, "Expected 201, got " + response.status);
+    client.test("Returns 201", function () {
+        client.assert(response.status === 201, "Expected 201, got " + response.status);
     });
 
     client.test("Title equal", function () {
         client.assert(response.body.title == "Вивчити HTTP");
     });
 %}
+### POST - Empty data
+POST {{WebApplication1_HostAddress}}/todos
+Content-Type: application/json
 
+{}
+
+> {%
+    client.test("Returns 400", function () {
+        client.assert(response.status === 400, "Expected 400, got " + response.status);
+    });
+%}
+### POST - Object with title null
+POST {{WebApplication1_HostAddress}}/todos
+Content-Type: application/json
+
+{
+  "title": null,
+  "isDone": false 
+}
+
+> {%
+    client.test("Returns 400", function () {
+        client.assert(response.status === 400, "Expected 400, got " + response.status);
+    });
+%}
 ### Get all todos
 GET {{WebApplication1_HostAddress}}/todos
 ### Update - existing item

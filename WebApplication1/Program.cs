@@ -67,14 +67,16 @@ app.MapGet("/todos/{id}", Results<Ok<TodoItem>, NotFound<string>>(ITodoRepositor
     })
     .WithName("GetTodosById");
 
-app.MapPost("/todos", Results<Ok<TodoItem>, BadRequest<string>>(ITodoRepository repository, CreateTodoRequest todoItem ) =>
+app.MapPost("/todos", Results<CreatedAtRoute<TodoItem>, BadRequest<string>>(ITodoRepository repository, CreateTodoRequest todoItem ) =>
     {
         if(string.IsNullOrWhiteSpace(todoItem.Title))
         {
             return TypedResults.BadRequest("Title cannot be null or empty");
         }
 
-        return TypedResults.Ok(repository.Add(isDone: todoItem.IsDone, title: todoItem.Title));
+       var result = repository.Add(isDone: todoItem.IsDone, title: todoItem.Title);
+        
+       return TypedResults.CreatedAtRoute(result,"GetTodosById", new { id = result.Id });
     })
     .WithName("PostTodos");
 
