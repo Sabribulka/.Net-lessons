@@ -5,6 +5,7 @@ namespace WebApplication1.Services;
 public class InMemoryTodoRepository : ITodoRepository
 {
     private readonly List<TodoItem> _todoList = [];
+    private readonly ILogger _logger;
     
     public TodoItem[] GetAll()
     {
@@ -21,6 +22,8 @@ public class InMemoryTodoRepository : ITodoRepository
         var newItem = new TodoItem(isDone, title);
         
         _todoList.Add(newItem);
+        
+        _logger.LogInformation("Added new item {title} with id {id}", title, newItem.Id);
 
         return newItem;
     }
@@ -47,11 +50,19 @@ public class InMemoryTodoRepository : ITodoRepository
         
         if (deletedItem == null)
         {
+            _logger.LogWarning("The item with id {id} doesn't exist", id);
             return false;
         }
-       
+        
         _todoList.Remove(deletedItem);
+        
+        _logger.LogInformation("Removed item with id {id}", id);
 
         return true;
+    }
+
+    public InMemoryTodoRepository(ILogger<InMemoryTodoRepository> logger)
+    {
+        _logger = logger;
     }
 }

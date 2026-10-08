@@ -78,3 +78,5 @@ Content-Type: application/json
 ###
 DELETE {{WebApplication1_HostAddress}}/todos/{{todoId}}
 ###
+DELETE {{WebApplication1_HostAddress}}/todos/00000000-0000-0000-0000-000000000000
+###
