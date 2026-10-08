@@ -53,13 +53,15 @@ app.MapGet("/hello/{name}", (string name) =>
 
 // TODOS
 
-app.MapGet("/todos", Ok<TodoItem[]>(ITodoRepository repository ) =>
+var todosGroup = app.MapGroup("/todos").WithTags("Todos");
+
+todosGroup.MapGet("/", Ok<TodoItem[]>(ITodoRepository repository ) =>
     {
         return TypedResults.Ok(repository.GetAll());
     })
     .WithName("GetTodos");
 
-app.MapGet("/todos/{id}", Results<Ok<TodoItem>, NotFound<string>>(ITodoRepository repository, Guid id ) =>
+todosGroup.MapGet("/{id}", Results<Ok<TodoItem>, NotFound<string>>(ITodoRepository repository, Guid id ) =>
     {
         var result = repository.GetById(id);
 
@@ -67,7 +69,7 @@ app.MapGet("/todos/{id}", Results<Ok<TodoItem>, NotFound<string>>(ITodoRepositor
     })
     .WithName("GetTodosById");
 
-app.MapPost("/todos", Results<CreatedAtRoute<TodoItem>, BadRequest<string>>(ITodoRepository repository, CreateTodoRequest todoItem ) =>
+todosGroup.MapPost("/", Results<CreatedAtRoute<TodoItem>, BadRequest<string>>(ITodoRepository repository, CreateTodoRequest todoItem ) =>
     {
         if(string.IsNullOrWhiteSpace(todoItem.Title))
         {
@@ -81,7 +83,7 @@ app.MapPost("/todos", Results<CreatedAtRoute<TodoItem>, BadRequest<string>>(ITod
     .WithName("PostTodos");
 
 
-app.MapPut("/todos/{id}",  Results<NoContent, NotFound<string>, BadRequest<string>>(ITodoRepository repository, CreateTodoRequest todoItem, Guid id ) =>
+todosGroup.MapPut("/{id}",  Results<NoContent, NotFound<string>, BadRequest<string>>(ITodoRepository repository, CreateTodoRequest todoItem, Guid id ) =>
     {
         if(string.IsNullOrWhiteSpace(todoItem.Title))
         {
@@ -94,7 +96,7 @@ app.MapPut("/todos/{id}",  Results<NoContent, NotFound<string>, BadRequest<strin
     })
     .WithName("UpdateTodos");
 
-app.MapDelete("/todos/{id}", Results<NoContent, NotFound<string>>(ITodoRepository repository, Guid id ) =>
+todosGroup.MapDelete("/{id}", Results<NoContent, NotFound<string>>(ITodoRepository repository, Guid id ) =>
     {
         var result = repository.Remove(id);
         
