@@ -2,5 +2,55 @@
 
 GET {{WebApplication1_HostAddress}}/weatherforecast/
 Accept: application/json
+###
+POST {{WebApplication1_HostAddress}}/todos
+Content-Type: application/json
 
+{
+  "title": "Вивчити HTTP",
+  "isDone": false
+}
+
+> {%
+    client.global.set("todoId", response.body.id);
+
+    client.test("Returns 200", function () {
+        client.assert(response.status === 200, "Expected 201, got " + response.status);
+    });
+
+    client.test("Title equal", function () {
+        client.assert(response.body.title == "Вивчити HTTP");
+    });
+%}
+
+### Get all todos
+GET {{WebApplication1_HostAddress}}/todos
+### Update - existing item
+PUT {{WebApplication1_HostAddress}}/todos/{{todoId}}
+Content-Type: application/json
+
+{
+  "title": "Вивчити Piska",
+  "isDone": true,
+}
+> {%
+    client.test("Returns 400", function () {
+        client.assert(response.status === 400, "Expected 400, got " + response.status);
+    });
+%}
+### Update - not existing id (expect 404)
+PUT {{WebApplication1_HostAddress}}/todos/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "title": "Вивчити Piska",
+  "isDone": true
+}
+> {%
+    client.test("Returns 404", function () {
+        client.assert(response.status === 404, "Expected 404, got " + response.status);
+    });
+%}
+###
+DELETE {{WebApplication1_HostAddress}}/todos/{{todoId}}
 ###
