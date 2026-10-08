@@ -31,11 +31,11 @@ Content-Type: application/json
 
 {
   "title": "Вивчити Piska",
-  "isDone": true,
+  "isDone": true
 }
 > {%
-    client.test("Returns 400", function () {
-        client.assert(response.status === 400, "Expected 400, got " + response.status);
+    client.test("Returns 204", function () {
+        client.assert(response.status === 204, "Expected 204, got " + response.status);
     });
 %}
 ### Update - not existing id (expect 404)
