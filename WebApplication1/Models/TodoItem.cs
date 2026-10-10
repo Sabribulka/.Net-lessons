@@ -2,10 +2,10 @@ namespace WebApplication1.Models;
 
 public record TodoItem
 {
-    public Guid Id { get; }
+    public Guid Id { get; private set; }
     public string Title { get; set; }
     public bool IsDone { get; set; }
-    public DateTime CreatedAt { get; }
+    public DateTime CreatedAt { get; private set; }
     
     public TodoItem(bool isDone, string title)
     {

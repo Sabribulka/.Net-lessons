@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Services;
 using WebApplication1.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -11,6 +14,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<IWeatherService, WeatherService>();
 builder.Services.AddSingleton<ITodoRepository, InMemoryTodoRepository>();
+builder.Services.AddDbContext<TodoDbContext>(options => options.UseSqlite(connectionString));
 // builder.Services.AddScoped<IWeatherService, WeatherService>();
 // builder.Services.AddTransient<IWeatherService, WeatherService>();
 var app = builder.Build();
