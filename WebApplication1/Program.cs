@@ -13,7 +13,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<IWeatherService, WeatherService>();
-builder.Services.AddSingleton<ITodoRepository, InMemoryTodoRepository>();
+// builder.Services.AddSingleton<ITodoRepository, InMemoryTodoRepository>();
+builder.Services.AddScoped<ITodoRepository, EfTodoRepository>();
+
 builder.Services.AddDbContext<TodoDbContext>(options => options.UseSqlite(connectionString));
 // builder.Services.AddScoped<IWeatherService, WeatherService>();
 // builder.Services.AddTransient<IWeatherService, WeatherService>();

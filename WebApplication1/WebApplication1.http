@@ -7,8 +7,8 @@ POST {{WebApplication1_HostAddress}}/todos
 Content-Type: application/json
 
 {
-  "title": "Вивчити HTTP",
-  "isDone": false
+  "title": "Sraka",
+  "isDone": true
 }
 
 > {%
@@ -49,6 +49,8 @@ Content-Type: application/json
 %}
 ### Get all todos
 GET {{WebApplication1_HostAddress}}/todos
+### Get todo by id
+GET {{WebApplication1_HostAddress}}/todos/{{todoId}}
 ### Update - existing item
 PUT {{WebApplication1_HostAddress}}/todos/{{todoId}}
 Content-Type: application/json
